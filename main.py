@@ -1,11 +1,20 @@
 import json
 import os
+import re
+import subprocess
 
 CATEGORIES_FILE = "categories.json"
+
 
 def main():
     print_toolsave_logo()
     menu()
+
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+    # print("\033[H\033[J", end="")
+
 
 def print_toolsave_logo():
     logo = """
@@ -19,9 +28,9 @@ def print_toolsave_logo():
     """
     print(logo)
 
+# --------------------------------------MENU--------------------------------------
 
 
-#MENU
 def menu():
     while True:
         print("\nWelcome to TOOLSAVE")
@@ -29,50 +38,47 @@ def menu():
         print("2. Add Category")
         print("3. List Categories")
 
-        choice = input("Enter your choice: ")
+        choice = input("\nEnter your choice: ")
 
         if choice == '1':
             break
         elif choice == '2':
-            name = input("Enter the name of the category: ")
+            name = input("\nEnter the name of the category: ")
             add_category(name)
         elif choice == '3':
             list_categories()
         else:
-            print("Invalid choice. Please try again.")
+            print("\nInvalid choice. Please try again.")
+    clear_screen()
 
 
-#CATEGORIES
+# CATEGORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-##############################             AÑADIR CATEGORIAS              ##################################################################
+# --------------------------------------AÑADIR CATEGORIAS--------------------------------------
 
-#Función que añade una categoría
-def add_category(name):
+def add_category(name):  # Función que añade una categoría
     category = load_categories()
     category[name] = name
     save_categories(category)
     print(f"Command '{name}' added successfully.")
 
-#Devuelve las categorias guardades en el fichero si hay, si no devuelve {}
-def load_categories():
+
+def load_categories():  # Devuelve las categorias guardades en el fichero si hay, si no devuelve {}
     if os.path.exists(CATEGORIES_FILE):
         with open(CATEGORIES_FILE, 'r') as file:
             return json.load(file)
     return {}
 
-#Actualiza el fichero de categorias con una categoria nueva
-def save_categories(category):
+
+def save_categories(category):  # Actualiza el fichero de categorias con una categoria nueva
     with open(CATEGORIES_FILE, 'w') as file:
         json.dump(category, file, indent=4)
 
 
+# --------------------------------------LISTAR CATEGORIAS--------------------------------------
 
-##############################             LISTAR CATEGORIAS              ##################################################################
-
-
-#Lista todas las categorias y te da a elegir una
-def list_categories():
+def list_categories():  # Lista todas las categorias y te da a elegir una
     categories = load_categories()
     if categories:
         for i, name in enumerate(categories):
@@ -86,20 +92,20 @@ def list_categories():
     else:
         print("No categories saved.")
 
-#Muestra el menu de una categoria
-def show_category(category):
 
-    #Creamos el category file si no exsiste
+def show_category(category):  # Muestra el menu de una categoria
+
+    # Creamos el category file si no exsiste
     CATEGORY_FILE = category + ".json"
     if not os.path.exists(CATEGORIES_FILE):
         # Crea un archivo JSON con un diccionario vacío
         with open(CATEGORIES_FILE, 'w') as file:
             json.dump({}, file, indent=4)
 
-    #Pasamos al menú
+    # Pasamos al menú
     choice = '0'
+    print(f"\nThis is your {category}ToolSave")
     while choice != '1':
-        print(f"\nWelcome to {category}")
         print("1. Exit this category")
         print("2. Add Command")
         print("3. List Commands")
@@ -116,20 +122,24 @@ def show_category(category):
             list_commands(CATEGORY_FILE)
         else:
             print("Invalid choice. Please try again.")
+    clear_screen()
 
 
+# COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+def load_commands(catgoryfile):
+    if os.path.exists(catgoryfile):
+        with open(catgoryfile, 'r') as file:
+            return json.load(file)
+    return {}
+
+def save_commands(commands, catgoryfile):
+    with open(catgoryfile, 'w') as file:
+        json.dump(commands, file, indent=4)
 
 
-
-
-
-
-
-
-
-#COMANDOS
-def list_commands(CATEGORY_FILE):
-    commands = load_commands(CATEGORY_FILE)
+def list_commands(catgoryfile):
+    commands = load_commands(catgoryfile)
     if commands:
         i = 0
         for name, command in commands.items():
@@ -138,24 +148,50 @@ def list_commands(CATEGORY_FILE):
     else:
         print("No commands saved.")
 
-def load_commands(CATEGORY_FILE):
-    if os.path.exists(CATEGORY_FILE):
-        with open(CATEGORY_FILE, 'r') as file:
-            return json.load(file)
-    return {}
 
-def save_commands(commands, CATEGORY_FILE):
-    with open(CATEGORY_FILE, 'w') as file:
-        json.dump(commands, file, indent=4)
+# def add_command(name, command, catgoryfile):
+#     commands = load_commands(catgoryfile)
+#     commands[name] = command
+#     save_commands(commands, catgoryfile)
+#     print(f"Command '{name}' added successfully.")
 
-def add_command(name, command, CATEGORY_FILE):
-    commands = load_commands(CATEGORY_FILE)
-    commands[name] = command
-    save_commands(commands, CATEGORY_FILE)
-    print(f"Command '{name}' added successfully.")
 
-#COPYRIGHT
+def add_command(name, command, category_file):
+    commands = load_commands(category_file)
+    if command not in commands:
+        commands[command] = {}
+    commands[command][name] = command
+    save_commands(commands, category_file)
+    print(f"Command '{name}' added successfully to the category.")
+
+
+def prompt_for_variables(command):
+    variables = re.findall(r'\{(.*?)\}', command)
+    values = {}
+    for var in variables:
+        values[var] = input(f"Enter value for {var}: ")
+    return values
+
+
+def replace_variables(command, values):
+    for var, val in values.items():
+        command = command.replace(f'{{{var}}}', val)
+    return command
+
+
+def execute_command(category, name):
+    categories = load_categories()
+    if category in categories and name in categories[category]:
+        command = categories[category][name]
+        values = prompt_for_variables(command)
+        command_with_values = replace_variables(command, values)
+        try:
+            subprocess.run(command_with_values, shell=True, check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Error executing command '{name}': {e}")
+    else:
+        print(f"No command found with the name '{name}' in category '{category}'.")
+
 
 if __name__ == "__main__":
     main()
-
