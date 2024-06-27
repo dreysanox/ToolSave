@@ -125,7 +125,7 @@ def show_category(category):  # Muestra el menu de una categoria
     clear_screen()
 
 
-# COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# COMMANDS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def load_commands(catgoryfile):
     if os.path.exists(catgoryfile):
@@ -133,34 +133,40 @@ def load_commands(catgoryfile):
             return json.load(file)
     return {}
 
+
 def save_commands(commands, catgoryfile):
     with open(catgoryfile, 'w') as file:
         json.dump(commands, file, indent=4)
 
 
-def list_commands(catgoryfile):
-    commands = load_commands(catgoryfile)
+# --------------------------------------LISTAR COMANDOS DE UNA CATEGORIA--------------------------------------
+
+
+def list_commands(category_file):
+    commands = load_commands(category_file)
     if commands:
-        i = 0
+        i = 1
         for name, command in commands.items():
             print(f"{i}. {name}: {command}")
             i += 1
+        try:
+            selected_name = input("Select a command: ")
+            selected_command = commands[selected_name]['command']
+            execute_command(category_file, selected_command)
+        except (ValueError, IndexError):
+            print("Invalid selection. Please try again.")
     else:
         print("No commands saved.")
 
 
-# def add_command(name, command, catgoryfile):
-#     commands = load_commands(catgoryfile)
-#     commands[name] = command
-#     save_commands(commands, catgoryfile)
-#     print(f"Command '{name}' added successfully.")
+# --------------------------------------AÑADIR COMANDO A UNA CATEGORÍA--------------------------------------
 
 
 def add_command(name, command, category_file):
     commands = load_commands(category_file)
-    if command not in commands:
-        commands[command] = {}
-    commands[command][name] = command
+    if name not in commands:
+        commands[name] = {}
+    commands[name]['command'] = command
     save_commands(commands, category_file)
     print(f"Command '{name}' added successfully to the category.")
 
@@ -179,18 +185,15 @@ def replace_variables(command, values):
     return command
 
 
-def execute_command(category, name):
-    categories = load_categories()
-    if category in categories and name in categories[category]:
-        command = categories[category][name]
-        values = prompt_for_variables(command)
-        command_with_values = replace_variables(command, values)
-        try:
-            subprocess.run(command_with_values, shell=True, check=True)
-        except subprocess.CalledProcessError as e:
-            print(f"Error executing command '{name}': {e}")
-    else:
-        print(f"No command found with the name '{name}' in category '{category}'.")
+def execute_command(category_file, name):
+    commands = load_commands(category_file)
+    command = commands[name]['command']
+    values = prompt_for_variables(command)
+    command_with_values = replace_variables(command, values)
+    try:
+        subprocess.run(command_with_values, shell=True, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error executing command '{name}': {e}")
 
 
 if __name__ == "__main__":
