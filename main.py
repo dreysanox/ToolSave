@@ -151,8 +151,7 @@ def list_commands(category_file):
             i += 1
         try:
             selected_name = input("Select a command: ")
-            selected_command = commands[selected_name]['command']
-            execute_command(category_file, selected_command)
+            execute_command(category_file, selected_name)
         except (ValueError, IndexError):
             print("Invalid selection. Please try again.")
     else:
