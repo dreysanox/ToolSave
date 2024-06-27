@@ -186,9 +186,9 @@ def replace_variables(command, values):
 
 def execute_command(category_file, name):
     commands = load_commands(category_file)
-    command = commands[name]['command']
-    values = prompt_for_variables(command)
-    command_with_values = replace_variables(command, values)
+    command_value = commands[name]['command']
+    values = prompt_for_variables(command_value)
+    command_with_values = replace_variables(command_value, values)
     try:
         subprocess.run(command_with_values, shell=True, check=True)
     except subprocess.CalledProcessError as e:
