@@ -1,0 +1,8 @@
+{
+    "listar": {
+        "command": "ls"
+    },
+    "copia": {
+        "command": "cp {original} {copia}"
+    }
+}

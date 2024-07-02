@@ -12,8 +12,10 @@ def main():
 
 
 def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
-    # print("\033[H\033[J", end="")
+    subprocess.run('clear', shell=True, check=True)
+
+    print_toolsave_logo()
+
 
 
 def print_toolsave_logo():
@@ -49,7 +51,6 @@ def menu():
             list_categories()
         else:
             print("\nInvalid choice. Please try again.")
-    clear_screen()
 
 
 # CATEGORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -80,6 +81,7 @@ def save_categories(category):  # Actualiza el fichero de categorias con una cat
 # --------------------------------------LISTAR CATEGORIAS--------------------------------------
 
 def list_categories():  # Lista todas las categorias y te da a elegir una
+    clear_screen()
     categories = load_categories()
     if categories:
         for i, name in enumerate(categories):
@@ -95,7 +97,7 @@ def list_categories():  # Lista todas las categorias y te da a elegir una
 
 
 def show_category(category):  # Muestra el menu de una categoria
-
+    clear_screen()
     # Creamos el category file si no exsiste
     CATEGORY_FILE = category + ".json"
     if not os.path.exists(CATEGORIES_FILE):
