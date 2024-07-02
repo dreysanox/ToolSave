@@ -59,7 +59,8 @@ def menu():
 
 def add_category(name):  # Función que añade una categoría
     category = load_categories()
-    category[name] = name
+    next_index = len(category)
+    category[next_index] = name
     save_categories(category)
     print(f"Command '{name}' added successfully.")
 
@@ -82,7 +83,7 @@ def list_categories():  # Lista todas las categorias y te da a elegir una
     categories = load_categories()
     if categories:
         for i, name in enumerate(categories):
-            print(f"{i}. {name}")
+            print(f"{i}. {categories[name]}")
         try:
             selected_index = input("Select a category: ")
             selected_category = categories[selected_index]
