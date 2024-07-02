@@ -29,6 +29,7 @@ def print_toolsave_logo():
     """
     print(logo)
 
+
 # --------------------------------------MENU--------------------------------------
 
 
@@ -195,12 +196,17 @@ def replace_variables(command, values):
 
 
 def execute_command(category_file, name):
+    clear_screen()
+    print("This is your output:\n")
     commands = load_commands(category_file)
     command_value = commands[name]['command']
     values = prompt_for_variables(command_value)
     command_with_values = replace_variables(command_value, values)
     try:
         subprocess.run(command_with_values, shell=True, check=True)
+        print("\n")
+        next = input("")
+
     except subprocess.CalledProcessError as e:
         print(f"Error executing command '{name}': {e}")
 
