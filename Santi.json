@@ -1,8 +1,11 @@
 {
-    "listar": {
-        "command": "ls"
+    "0": {
+        "name": "copiar",
+        "command": "cp {og} {dest}",
+        "descripcion": "asdbasdbjabsdjhbasjhdbahsbd"
     },
-    "copia": {
-        "command": "cp {original} {copia}"
+    "1": {
+        "name": "listar",
+        "command": "ls"
     }
 }

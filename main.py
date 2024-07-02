@@ -13,7 +13,6 @@ def main():
 
 def clear_screen():
     subprocess.run('clear', shell=True, check=True)
-
     print_toolsave_logo()
 
 
@@ -34,6 +33,7 @@ def print_toolsave_logo():
 
 
 def menu():
+    clear_screen()
     while True:
         print("\nWelcome to TOOLSAVE")
         print("1. Exit")
@@ -59,6 +59,7 @@ def menu():
 # --------------------------------------AÑADIR CATEGORIAS--------------------------------------
 
 def add_category(name):  # Función que añade una categoría
+    clear_screen()
     category = load_categories()
     next_index = len(category)
     category[next_index] = name
@@ -146,12 +147,15 @@ def save_commands(commands, catgoryfile):
 
 
 def list_commands(category_file):
+    clear_screen()
     commands = load_commands(category_file)
     if commands:
-        i = 1
-        for name, command in commands.items():
-            print(f"{i}. {name}: {command}")
-            i += 1
+
+        for i, command_info in commands.items():
+            name = command_info.get("name")
+            command = command_info.get("command")
+            print(f"{i}. {name} [{command}]")
+
         try:
             selected_name = input("Select a command: ")
             execute_command(category_file, selected_name)
@@ -165,10 +169,13 @@ def list_commands(category_file):
 
 
 def add_command(name, command, category_file):
+    clear_screen()
     commands = load_commands(category_file)
-    if name not in commands:
-        commands[name] = {}
-    commands[name]['command'] = command
+    next_index = len(commands)
+    if next_index not in commands:
+        commands[next_index] = {}
+    commands[next_index]['name'] = name
+    commands[next_index]['command'] = command
     save_commands(commands, category_file)
     print(f"Command '{name}' added successfully to the category.")
 
