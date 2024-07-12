@@ -22,6 +22,20 @@ chmod +x install.sh
 ./install.sh
 ```
 
+## Uninstall
+
+To uninstall ToolSave, simply remove the toolsave alias from the shell configuration file (".bashrc",".zshrc") by deleting the following line, usually placed at the end of the file:
+
+```bash
+alias toolsave='cd $SCRIPT_DIR && python3 main.py \"$@\" && cd -'
+```
+Then removed the cloned directory:
+
+```bash
+rm -rf ToolSave/
+```
+
+
 ## Usage
 
 To run the tool just write toolsave in your terminal
