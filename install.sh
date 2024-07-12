@@ -1,24 +1,34 @@
-
-### install.sh
-```bash
 #!/bin/bash
+
+# Check for python3
+if ! command -v python3 &> /dev/null; then
+    echo "python3 could not be found. Please install python3 to continue."
+    exit 1
+fi
 
 # Define the alias
 echo "The following allias will be added to your shell for easy tool usage"
 ALIAS="alias toolsave='python3 $(pwd)/main.py'"
 echo $ALIAS
 
-# Add the alias to the appropriate shell configuration file
+# Determine the appropriate shell configuration file
 SHELL_CONFIG=""
-if [ -n "$BASH_VERSION" ]; then
-    SHELL_CONFIG="$HOME/.bashrc"
-elif [ -n "$ZSH_VERSION" ]; then
-    SHELL_CONFIG="$HOME/.zshrc"
-else
-    echo "Unsupported shell. Please add the following alias manually to your shell configuration file:"
-    echo $ALIAS
-    exit 1
-fi
+case "$SHELL" in
+    */bash)
+        SHELL_CONFIG="$HOME/.bashrc"
+        ;;
+    */zsh)
+        SHELL_CONFIG="$HOME/.zshrc"
+        ;;
+    */fish)
+        SHELL_CONFIG="$HOME/.config/fish/config.fish"
+        ;;
+    *)
+        echo "Unsupported shell. Please add the following alias manually to your shell configuration file:"
+        echo $ALIAS
+        exit 1
+        ;;
+esac
 
 # Check if the alias already exists
 if grep -Fxq "$ALIAS" $SHELL_CONFIG; then
@@ -29,6 +39,11 @@ else
 fi
 
 # Reload the shell configuration
-source $SHELL_CONFIG
+if [ "$SHELL" = "/usr/bin/fish" ]; then
+    source $SHELL_CONFIG
+else
+    exec $SHELL
+fi
 
 echo "Installation complete. You can now use ToolSave by typing 'toolsave' in your terminal."
+
