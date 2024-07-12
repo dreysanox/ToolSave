@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Get the directory of the current script
+SCRIPT_DIR=$(dirname $(realpath $0))
+
+
 # Define the alias
 ALIAS="alias toolsave='cd $SCRIPT_DIR && python3 main.py'"
 
