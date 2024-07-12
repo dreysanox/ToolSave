@@ -12,7 +12,7 @@ def main():
 
 
 def clear_screen():
-    subprocess.run('clear', shell=True, check=True)
+    #subprocess.run('clear', shell=True, check=True)
     print_toolsave_logo()
 
 
@@ -89,7 +89,9 @@ def list_categories():  # Lista todas las categorias y te da a elegir una
         for i, name in enumerate(categories):
             print(f"{i}. {categories[name]}")
         try:
-            selected_index = input("Select a category: ")
+            selected_index = input("Select a category or press enter to exit: ")
+            if selected_index == '':
+                return
             selected_category = categories[selected_index]
             show_category(selected_category)
         except (ValueError, IndexError):
@@ -158,7 +160,9 @@ def list_commands(category_file):
             print(f"{i}. {name} [{command}]")
 
         try:
-            selected_name = input("Select a command: ")
+            selected_name = input("Select a command or press enter to exit: ")
+            if selected_name == '':
+                return
             execute_command(category_file, selected_name)
         except (ValueError, IndexError):
             print("Invalid selection. Please try again.")
