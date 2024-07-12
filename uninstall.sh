@@ -1,19 +1,26 @@
 #!/bin/bash
 
 # Define the alias
-ALIAS="alias toolsave='python3 $(pwd)/main.py'"
+ALIAS="alias toolsave='cd $SCRIPT_DIR && python3 main.py'"
 
 # Determine the appropriate shell configuration file
 SHELL_CONFIG=""
-if [ -n "$BASH_VERSION" ]; then
-    SHELL_CONFIG="$HOME/.bashrc"
-elif [ -n "$ZSH_VERSION" ]; then
-    SHELL_CONFIG="$HOME/.zshrc"
-else
-    echo "Unsupported shell. Please remove the following alias manually from your shell configuration file:"
-    echo $ALIAS
-    exit 1
-fi
+case "$SHELL" in
+    */bash)
+        SHELL_CONFIG="$HOME/.bashrc"
+        ;;
+    */zsh)
+        SHELL_CONFIG="$HOME/.zshrc"
+        ;;
+    */fish)
+        SHELL_CONFIG="$HOME/.config/fish/config.fish"
+        ;;
+    *)
+        echo "Unsupported shell. Please remove the following alias manually from your shell configuration file:"
+        echo $ALIAS
+        exit 1
+        ;;
+esac
 
 # Remove the alias from the shell configuration file
 if grep -Fxq "$ALIAS" $SHELL_CONFIG; then
@@ -24,7 +31,11 @@ else
 fi
 
 # Reload the shell configuration
-source $SHELL_CONFIG
+if [ "$SHELL" = "/usr/bin/fish" ]; then
+    source $SHELL_CONFIG
+else
+    exec $SHELL
+fi
 
 # Get the directory of the current script
 SCRIPT_DIR=$(dirname $(realpath $0))
