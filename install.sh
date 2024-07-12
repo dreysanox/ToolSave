@@ -8,7 +8,7 @@ fi
 
 # Define the alias
 echo "The following allias will be added to your shell for easy tool usage"
-ALIAS="alias toolsave='python3 $(pwd)/main.py'"
+ALIAS="alias toolsave='cd $SCRIPT_DIR && python3 main.py'"
 echo $ALIAS
 
 # Determine the appropriate shell configuration file
