@@ -12,7 +12,13 @@
 
 ## Installation
 
-Instructions for installing ToolSave.
+To install ToolSave, simply clone the GitHub repository and run the install script:
+
+```bash
+git clone https://github.com/yourusername/toolsave.git
+cd toolsave
+chmod +x install.sh
+./install.sh
 
 ## Usage
 
