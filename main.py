@@ -12,9 +12,8 @@ def main():
 
 
 def clear_screen():
-    #subprocess.run('clear', shell=True, check=True)
+    subprocess.run('clear', shell=True, check=True)
     print_toolsave_logo()
-
 
 
 def print_toolsave_logo():
@@ -101,9 +100,8 @@ def list_categories():  # Lista todas las categorias y te da a elegir una
 
 
 def show_category(category):  # Muestra el menu de una categoria
-    clear_screen()
     # Creamos el category file si no exsiste
-    CATEGORY_FILE = category + ".json"
+    category_file = category + ".json"
     if not os.path.exists(CATEGORIES_FILE):
         # Crea un archivo JSON con un diccionario vacío
         with open(CATEGORIES_FILE, 'w') as file:
@@ -113,6 +111,7 @@ def show_category(category):  # Muestra el menu de una categoria
     choice = '0'
     print(f"\nThis is your {category}ToolSave")
     while choice != '1':
+        clear_screen()
         print("1. Exit this category")
         print("2. Add Command")
         print("3. List Commands")
@@ -124,9 +123,9 @@ def show_category(category):  # Muestra el menu de una categoria
         elif choice == '2':
             name = input("Enter the name of the command: ")
             command = input("Enter the command: ")
-            add_command(name, command, CATEGORY_FILE)
+            add_command(name, command, category_file)
         elif choice == '3':
-            list_commands(CATEGORY_FILE)
+            list_commands(category_file)
         else:
             print("Invalid choice. Please try again.")
     clear_screen()
@@ -209,7 +208,7 @@ def execute_command(category_file, name):
     try:
         subprocess.run(command_with_values, shell=True, check=True)
         print("\n")
-        next = input("")
+        input("")
 
     except subprocess.CalledProcessError as e:
         print(f"Error executing command '{name}': {e}")
