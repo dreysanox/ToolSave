@@ -17,17 +17,36 @@ To install ToolSave, simply clone the GitHub repository and run the install scri
 ```bash
 git clone https://github.com/yourusername/toolsave.git
 cd toolsave
+
 chmod +x install.sh
 ./install.sh
+```
 
 ## Usage
 
-Examples of how to use ToolSave.
+To run the tool just write toolsave in your terminal
+```bash
+toolsave
+```
 
-## Contributing
+### Create a category
 
-Guidelines for contributing to the project.
+On the main menu, select the second option and enter your categoies desired name.
 
-## License
+### Add a command
 
-Information about the project's license.
+1. To add a command select a created category. 
+2. On the category menu select the "add command" option, and input your command with variable parts enclosed in curly braces {}.
+
+```bash
+Enter your command:
+
+mkdir {directory name}
+```
+This way, when you go to execute the command in the future, when you select it toolsave will ask you for the variables you included in the command and execute it in the right order without you having to remeber:
+
+```bash
+Enter the value for "directory name":
+```
+
+
