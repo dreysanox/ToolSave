@@ -4,9 +4,11 @@
 
 ## Features
 
+- **Crate your own command categories:** Organise your commands in categories to find them easily the next time you need them.
 - **Save Commands:** Store any command that you might need in the future.
+- **Easy command reuse:** After saving a command, you wont need to remember it's structure, ToolSave will only ask you for the parts the command needs and execute it with the right sintax.
 - **JSON Format:** Easily transferable and compatible with any machine.
-- **Convenient Access:** Retrieve saved commands quickly without searching online.
+
 
 ## Installation
 
