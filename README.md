@@ -4,9 +4,9 @@
 
 ## Features
 
-- **Crate your own command categories:** Organise your commands in categories to find them easily the next time you need them.
+- **Create your own command categories:** Organize your commands in categories to find them easily the next time you need them.
 - **Save Commands:** Store any command that you might need in the future.
-- **Easy command reuse:** After saving a command, you wont need to remember it's structure, ToolSave will only ask you for the parts the command needs and execute it with the right sintax.
+- **Easy command reuse:** After saving a command, you wont need to remember its structure, ToolSave will only ask you for the parts the command needs and execute it with the right syntax.
 - **JSON Format:** Easily transferable and compatible with any machine.
 
 
@@ -45,7 +45,7 @@ toolsave
 
 ### Create a category
 
-On the main menu, select the second option and enter your categoies desired name.
+On the main menu, select the second option and enter your categories desired name.
 
 ### Add a command
 
@@ -57,10 +57,9 @@ Enter your command:
 
 mkdir {directory name}
 ```
-This way, when you go to execute the command in the future, when you select it toolsave will ask you for the variables you included in the command and execute it in the right order without you having to remeber:
+This way, when you go to execute the command in the future, when you select it toolsave will ask you for the variables you included in the command and execute it in the right order without you having to remember:
 
 ```bash
 Enter the value for "directory name":
 ```
-
 
