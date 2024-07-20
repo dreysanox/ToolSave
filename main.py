@@ -61,6 +61,11 @@ def menu():
 def add_category(name):  # Función que añade una categoría
     clear_screen()
     category = load_categories()
+
+    if name in category.values():
+        print(f"Error: The category '{name}' is already created")
+        return
+    
     next_index = len(category)
     category[next_index] = name
     save_categories(category)
