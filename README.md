@@ -19,20 +19,16 @@ git clone https://github.com/yourusername/toolsave.git
 cd toolsave
 
 chmod +x install.sh
-./install.sh
+sudo ./install.sh
 ```
 
 ## Uninstall
 
-To uninstall ToolSave, simply remove the toolsave alias from the shell configuration file (".bashrc",".zshrc") by deleting the following line, usually placed at the end of the file:
+To uninstall ToolSave, simply run the uninstall script:
 
 ```bash
-alias toolsave='cd $SCRIPT_DIR && python3 main.py \"$@\" && cd -'
-```
-Then removed the cloned directory:
-
-```bash
-rm -rf ToolSave/
+cd toolsave
+sudo ./uninstall.sh
 ```
 
 
